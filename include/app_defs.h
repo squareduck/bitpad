@@ -51,6 +51,12 @@ typedef unsigned long  u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
 
+typedef enum bool {
+    false = 0,
+    true = 1
+} bool;
+
+
 // ____________________________________________________________________________
 //
 // App structure
@@ -114,6 +120,8 @@ typedef unsigned char  u8;
 // ____________________________________________________________________________
 
 #define PAD_COUNT 64
+#define PAD_ROWS 8
+#define PAD_COLS 8
 
 static const u8 ADC_MAP[PAD_COUNT] =
 {

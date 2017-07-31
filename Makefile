@@ -3,6 +3,8 @@ BUILDDIR = build
 TOOLS = tools
 
 SOURCES += src/app.c
+SOURCES += src/session.c
+SOURCES += src/utils.c
 
 INCLUDES += -Iinclude -I
 

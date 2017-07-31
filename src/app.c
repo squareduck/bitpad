@@ -36,21 +36,25 @@
 //______________________________________________________________________________
 
 #include "app.h"
-
-//______________________________________________________________________________
-//
-// This is where the fun is!  Add your code to the callbacks below to define how
-// your app behaves.
-//
-// In this example, we render the raw ADC data as LED rainbows.
-//______________________________________________________________________________
-
-static const u16 *g_ADC = 0;
+#include "utils.h"
+#include "session.h"
 
 //______________________________________________________________________________
 
 void app_surface_event(u8 type, u8 index, u8 value)
 {
+    if (type == TYPEPAD && value == 0) {
+        if (index == BTN_UP){ move_session_view_up(); }
+        if (index == BTN_DOWN) { move_session_view_down(); }
+        if (index == BTN_LEFT) { move_session_view_left(); }
+        if (index == BTN_RIGHT) { move_session_view_right(); }
+
+        if (is_pad(index) && value == 0) {
+            create_session_clip(get_column_from_pad_id(index), get_row_from_pad_id(index));
+        }
+
+        draw_session();
+    }
 }
 
 //______________________________________________________________________________
@@ -81,41 +85,12 @@ void app_cable_event(u8 type, u8 value)
 
 void app_timer_event()
 {
-	// render raw ADC data as LEDs
-	for (int i=0; i < PAD_COUNT; ++i)
-	{
-		// raw adc values are 12 bit, but LEDs are 6 bit.
-		// Let's saturate into r;g;b for a rainbow effect to show pressure
-		u16 r = 0;
-		u16 g = 0;
-		u16 b = 0;
-		
-		u16 x = (3 * MAXLED * g_ADC[i]) >> 12;
-		
-		if (x < MAXLED)
-		{
-			r = x;
-		}
-		else if (x >= MAXLED && x < (2*MAXLED))
-		{
-			r = MAXLED - x;
-			g = x - MAXLED;
-		}
-		else
-		{
-			g = MAXLED - x;
-			b = x - MAXLED;
-		}
-		
-		hal_plot_led(TYPEPAD, ADC_MAP[i], r, g, b);
-	}
 }
 
 //______________________________________________________________________________
 
 void app_init(const u16 *adc_raw)
 {
-	
-	// store off the raw ADC frame pointer for later use
-	g_ADC = adc_raw;
+    init_session();
+    draw_session();
 }
