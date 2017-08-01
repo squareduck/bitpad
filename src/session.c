@@ -3,6 +3,8 @@
 #include "session.h"
 
 static SessionClip clips[TRACKS_LIMIT][TRACK_CLIPS_LIMIT];
+static SessionClip cclips[TRACKS_LIMIT][TRACK_CLIPS_LIMIT];
+static SessionClip ccclips[TRACKS_LIMIT][TRACK_CLIPS_LIMIT];
 static SessionTrack tracks[TRACKS_LIMIT];
 static u8 view_offset_x = 0;
 static u8 view_offset_y = 0;
@@ -11,10 +13,10 @@ void init_session() {
     draw_session_clips();
 
     // Randomize track colors
-    for (u8 track_id = 0; track_id < TRACKS_LIMIT; track_id++) {
-        tracks[track_id].r = 255;
-        tracks[track_id].g = 0;
-        tracks[track_id].b = 0;
+    for (u8 i = 0; i < TRACKS_LIMIT; i++) {
+        tracks[i].r = rand(255);
+        tracks[i].g = rand(255);
+        tracks[i].b = rand(255);
     }
 }
 
@@ -53,7 +55,6 @@ void move_session_view_right() {
 void create_session_clip(u8 x, u8 y) {
     clips[x + view_offset_x][y + view_offset_y].is_present = true;
 }
-
 
 // ----------------------------------------------------------------------------
 // Drawing
